@@ -37,6 +37,7 @@ stages:
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(GitVersion.NuGetVersionV2)
+          $(build.buildid)
 
     - publish: $(Build.SourcesDirectory)/content-api/deploy
       artifact: manifests
@@ -63,7 +64,6 @@ stages:
               namespace: 'content-api'
               manifests: |
                 $(Pipeline.Workspace)/manifests/content-api-namespace.yml
-              containers: '$(containerRegistry)/$(imageRepository):$(GitVersion.NuGetVersionV2)'
 
           - task: KubernetesManifest@0
             displayName: Deploy to Kubernetes cluster
@@ -74,5 +74,5 @@ stages:
               manifests: |
                 $(Pipeline.Workspace)/manifests/content-api-deploy.yml
                 $(Pipeline.Workspace)/manifests/content-api-service.yml
-              containers: '$(containerRegistry)/$(imageRepository):$(GitVersion.NuGetVersionV2)'
+              containers: '$(containerRegistry)/$(imageRepository):$(build.buildid)'
 
