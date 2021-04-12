@@ -29,7 +29,7 @@ stages:
     steps:
     - script: |
         dotnet tool install --global GitVersion.Tool
-        dotnet gitversion
+        dotnet gitversion /output buildserver
     - task: Docker@2
       displayName: Build and push an image to container registry
       inputs:
@@ -64,6 +64,7 @@ stages:
               kubernetesServiceConnection: 'AKS'
               namespace: 'content-api'
               manifests: |
+                $(Pipeline.Workspace)/manifests/content-api-namespace.yml
                 $(Pipeline.Workspace)/manifests/content-api-deploy.yml
                 $(Pipeline.Workspace)/manifests/content-api-service.yml
               containers: '$(containerRegistry)/$(imageRepository):$(tag)'
