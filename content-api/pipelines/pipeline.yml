@@ -10,7 +10,7 @@ variables:
   dockerRegistryServiceConnection: 'ACR'
   imageRepository: 'content-api'
   containerRegistry: 'dbmacr'
-  dockerfilePath: '**/content-api/Dockerfile'
+  dockerfilePath: '**/content-api/src/Dockerfile'
   tag: '$(Build.BuildId)'
 
 
