@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: content-api
-        image: dbmacr/content-api
+        image: dbmacr.azurecr.io/content-api
         resources:
           requests:
             cpu: 500m

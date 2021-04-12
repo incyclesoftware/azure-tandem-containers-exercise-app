@@ -9,7 +9,7 @@ variables:
   # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: 'ACR'
   imageRepository: 'content-api'
-  containerRegistry: 'dbmacr'
+  containerRegistry: 'dbmacr.azurecr.io'
   dockerfilePath: '**/content-api/src/Dockerfile'
   tag: '$(Build.BuildId)'
 
