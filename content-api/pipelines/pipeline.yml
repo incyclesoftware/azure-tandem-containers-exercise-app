@@ -37,7 +37,7 @@ stages:
         tags: |
           $(tag)
 
-    - publish: $(Pipeline.Workspace)/content-api/deploy
+    - publish: $(Build.SourcesDirectory)/content-api/deploy
       artifact: manifests
 
 - stage: Deploy
