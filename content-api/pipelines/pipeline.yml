@@ -61,7 +61,7 @@ stages:
               kubernetesServiceConnection: 'AKS'
               namespace: 'content-api'
               manifests: |
-                $(Pipeline.Workspace)/deploy/content-api-deploy.yml
-                $(Pipeline.Workspace)/deploy/content-api-service.yml
+                $(Pipeline.Workspace)/manifests/content-api-deploy.yml
+                $(Pipeline.Workspace)/manifests/content-api-service.yml
               containers: '$(containerRegistry)/$(imageRepository):$(tag)'
 
