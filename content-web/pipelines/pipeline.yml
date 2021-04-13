@@ -1,5 +1,10 @@
 trigger:
-- master
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - /content-web
 
 resources:
 - repo: self
@@ -7,12 +12,10 @@ resources:
 variables:
 
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: 'a0ba78e3-028f-40fe-8f79-9da05eeee9e3'
-  imageRepository: 'sampleapplication'
+  dockerRegistryServiceConnection: 'ACR'
+  imageRepository: 'content-web'
   containerRegistry: 'dbmacr.azurecr.io'
-  dockerfilePath: '**/Dockerfile'
-  tag: '$(Build.BuildId)'
-  imagePullSecret: 'dbmacr1480a2f1-auth'
+  dockerfilePath: '**/content-web/src/Dockerfile'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
@@ -27,6 +30,9 @@ stages:
     pool:
       vmImage: $(vmImageName)
     steps:
+    - script: |
+        dotnet tool install --global GitVersion.Tool
+        dotnet gitversion /output buildserver
     - task: Docker@2
       displayName: Build and push an image to container registry
       inputs:
@@ -35,10 +41,11 @@ stages:
         dockerfile: $(dockerfilePath)
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
-          $(tag)
+          $(GitVersion.NuGetVersionV2)
+          $(build.buildid)
 
-    #- upload: manifests
-    #  artifact: manifests
+    - publish: $(Build.SourcesDirectory)/content-web/deploy
+      artifact: manifests
 
 - stage: Deploy
   displayName: Deploy stage
@@ -49,27 +56,28 @@ stages:
     displayName: Deploy
     pool:
       vmImage: $(vmImageName)
-    environment: 'sampleapplication-5915.content-web'
+    environment: 'dev'
     strategy:
       runOnce:
         deploy:
           steps:
           - task: KubernetesManifest@0
-            displayName: Create imagePullSecret
+            displayName: Deploy to Kubernetes cluster
             inputs:
-              action: createSecret
-              secretName: $(imagePullSecret)
-              dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
+              action: 'deploy'
+              kubernetesServiceConnection: 'AKS'
+              namespace: 'content-web'
+              manifests: |
+                $(Pipeline.Workspace)/manifests/content-web-namespace.yml
 
           - task: KubernetesManifest@0
             displayName: Deploy to Kubernetes cluster
             inputs:
-              action: deploy
+              action: 'deploy'
+              kubernetesServiceConnection: 'AKS'
+              namespace: 'content-web'
               manifests: |
-                $(Pipeline.Workspace)/manifests/deployment.yml
-                $(Pipeline.Workspace)/manifests/service.yml
-              imagePullSecrets: |
-                $(imagePullSecret)
-              containers: |
-                $(containerRegistry)/$(imageRepository):$(tag)
+                $(Pipeline.Workspace)/manifests/content-web-deploy.yml
+                $(Pipeline.Workspace)/manifests/content-web-service.yml
+              containers: '$(containerRegistry)/$(imageRepository):$(build.buildid)'
 
