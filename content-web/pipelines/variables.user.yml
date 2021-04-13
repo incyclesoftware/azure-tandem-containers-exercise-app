@@ -1,0 +1,6 @@
+variables:
+# Container registry service connection established during pipeline creation
+- dockerRegistryServiceConnection: 'ACR'
+- kubernetesServiceConnection: 'AKS'
+- imageRepository: 'content-api'
+- containerRegistry: 'dbmacr.azurecr.io'
