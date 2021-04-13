@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: content-web
-        image: whatthehackmsft/content-web
+        image: dbmacr.azurecr.io/content-web
         resources:
           requests:
             cpu: 500m
