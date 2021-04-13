@@ -10,15 +10,12 @@ resources:
 - repo: self
 
 variables:
+  - template: variables.user.yml
 
-  # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: 'ACR'
-  imageRepository: 'content-api'
-  containerRegistry: 'dbmacr.azurecr.io'
-  dockerfilePath: '**/content-api/src/Dockerfile'
+  - { name: dockerfilePath, value: '**/content-api/src/Dockerfile' }
 
   # Agent VM image name
-  vmImageName: 'ubuntu-latest'
+  - { name: vmImageName, value: 'ubuntu-latest' }
 
 
 stages:
@@ -65,8 +62,8 @@ stages:
             displayName: Deploy to Kubernetes cluster
             inputs:
               action: 'deploy'
-              kubernetesServiceConnection: 'AKS'
-              namespace: 'content-api'
+              kubernetesServiceConnection: $(kubernetesServiceConnection)
+              namespace: 'conference-app'
               manifests: |
                 $(Pipeline.Workspace)/manifests/conference-app-namespace.yml
 
@@ -74,8 +71,8 @@ stages:
             displayName: Deploy to Kubernetes cluster
             inputs:
               action: 'deploy'
-              kubernetesServiceConnection: 'AKS'
-              namespace: 'content-api'
+              kubernetesServiceConnection: $(kubernetesServiceConnection)
+              namespace: 'conference-app'
               manifests: |
                 $(Pipeline.Workspace)/manifests/content-api-deploy.yml
                 $(Pipeline.Workspace)/manifests/content-api-service.yml
