@@ -4,23 +4,3 @@ metadata:
   name: conference-app
 spec: {}
 status: {}
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: conference-app-sa
-  namespace: conference-app
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: conference-app-sa-rb
-  namespace: conference-app
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: cluster-admin
-subjects:
-- kind: ServiceAccount
-  name: conference-app-sa
-  namespace: conference-app
