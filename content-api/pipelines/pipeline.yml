@@ -68,7 +68,7 @@ stages:
               kubernetesServiceConnection: 'AKS'
               namespace: 'content-api'
               manifests: |
-                $(Pipeline.Workspace)/manifests/content-api-namespace.yml
+                $(Pipeline.Workspace)/manifests/conference-app-namespace.yml
 
           - task: KubernetesManifest@0
             displayName: Deploy to Kubernetes cluster
