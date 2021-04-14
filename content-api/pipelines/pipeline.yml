@@ -47,7 +47,7 @@ stages:
 - stage: Deploy
   displayName: Deploy stage
   dependsOn: Build
-
+  condition: ${{ eq(variables.deployAfterBuild, true) }}
   jobs:
   - deployment: Deploy
     displayName: Deploy

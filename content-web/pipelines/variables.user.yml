@@ -4,3 +4,4 @@ variables:
 - { name: kubernetesServiceConnection, value: 'AKS' }
 - { name: imageRepository, value: 'content-web' }
 - { name: containerRegistry, value: 'dbmacr.azurecr.io' }
+- { name: deployAfterBuild, value: 'false' }

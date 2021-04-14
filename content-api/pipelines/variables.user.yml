@@ -1,6 +1,7 @@
-  variables:
-  # Container registry service connection established during pipeline creation
-  - { name: dockerRegistryServiceConnection, value: 'ACR' }
-  - { name: kubernetesServiceConnection, value: 'AKS' }
-  - { name: imageRepository, value: 'content-api' }
-  - { name: containerRegistry, value: 'dbmacr.azurecr.io' }
+variables:
+# Container registry service connection established during pipeline creation
+- { name: dockerRegistryServiceConnection, value: 'ACR' }
+- { name: kubernetesServiceConnection, value: 'AKS' }
+- { name: imageRepository, value: 'content-api' }
+- { name: containerRegistry, value: 'dbmacr.azurecr.io' }
+- { name: deployAfterBuild, value: 'false' }  
