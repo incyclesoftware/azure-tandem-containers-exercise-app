@@ -77,4 +77,5 @@ stages:
                 $(Pipeline.Workspace)/manifests/content-web-deploy.yml
                 $(Pipeline.Workspace)/manifests/content-web-service.yml
               containers: '$(containerRegistry)/$(imageRepository):$(build.buildid)'
+              rolloutStatusTimeout: 60
 
