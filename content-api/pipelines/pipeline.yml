@@ -27,6 +27,8 @@ stages:
     pool:
       vmImage: $(vmImageName)
     steps:
+    - checkout: self
+      fetchDepth: 0     
     - script: |
         dotnet tool install --global GitVersion.Tool
         dotnet gitversion /output buildserver
